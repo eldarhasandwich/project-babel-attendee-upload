@@ -24,28 +24,11 @@ export function pullAttendee(companyID, listID, attendeeID) {
                     return;
                 }
 
-                console.log(snapshot.val())
+                dispatch(setSingleAttendee(snapshot.val(), companyID, listID, attendeeID))
+                dispatch(setAttendeeLoadedStatus(true))
+                dispatch(setIncorrectKeyStatus(false))
+                dispatch(setAttendeeInfoLoading(false))
 
-                Fire
-                    .storage()
-                    .ref(companyID + "/" + listID)
-                    .child(attendeeID + ".mp3")
-                    .getDownloadURL()
-                    .then(function (url) {
-                        dispatch(setSingleAttendee(snapshot.val(), companyID, listID, attendeeID, url))
-
-                        dispatch(setAttendeeLoadedStatus(true))
-                        dispatch(setIncorrectKeyStatus(false))
-                        dispatch(setAttendeeInfoLoading(false))
-                        dispatch(audioActions.audioSrc(`audio-${attendeeID}`, url))
-                    })
-                    .catch(function (error) {
-                        dispatch(setSingleAttendee(snapshot.val(), companyID, listID, attendeeID, null))
-
-                        dispatch(setAttendeeLoadedStatus(true))
-                        dispatch(setIncorrectKeyStatus(false))
-                        dispatch(setAttendeeInfoLoading(false))
-                    })
             })
     }
 }

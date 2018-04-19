@@ -1,3 +1,17 @@
+
+# Project Babel Attendee Upload Portal
+
+Clone and run source with:
+```
+git clone git@github.com:eldarhasandwich/project-babel-attendee-upload.git
+cd project-babel
+npm install
+npm run
+```
+
+------
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
