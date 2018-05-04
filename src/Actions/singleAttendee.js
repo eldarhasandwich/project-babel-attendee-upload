@@ -1,8 +1,7 @@
-import Fire from '../Classes/Fire'
-import {actions as audioActions} from 'redux-audio-fixed'
+import * as request from 'superagent'
+import config from '../config'
 
-// ?_attKey=testCompany~-L98RvfDywenSp7GHgLQ~-L98_omkkBK2wuyWFNj5
-// ?_attKey=testCompany~-L98RvfDywenSp7GHgLQ~-L99phpKLgK3IMvF8b46
+import Fire from '../Classes/Fire'
 
 export function pullAttendee(companyID, listID, attendeeID) {
     return (dispatch, getState) => {
@@ -10,26 +9,24 @@ export function pullAttendee(companyID, listID, attendeeID) {
         if (companyID === "" || listID === "" || attendeeID === "") {
             return;
         }
-        let directory = "_COMPANIES/" + companyID + "/_LISTS/" + listID + "/_ATTENDEES/" + attendeeID
-        console.log(directory)
 
-        Fire
-            .database()
-            .ref(directory)
-            .once("value", function (snapshot) {
-                if (!snapshot.val()) {
-                    // alert("The provided key is incorrect!")
+        request
+            .get(config.api + "/attendee/load")
+            .query({compID: companyID, listID: listID, attID: attendeeID})
+            .then(function(res) {
+                console.log(res)
+                if (!res) {
                     dispatch(setIncorrectKeyStatus(true))
                     dispatch(setAttendeeInfoLoading(false))
-                    return;
+                } else {
+                    dispatch(setSingleAttendee(res.body, companyID, listID, attendeeID))
+                    dispatch(setAttendeeLoadedStatus(true))
+                    dispatch(setIncorrectKeyStatus(false))
+                    dispatch(setAttendeeInfoLoading(false))
                 }
 
-                dispatch(setSingleAttendee(snapshot.val(), companyID, listID, attendeeID))
-                dispatch(setAttendeeLoadedStatus(true))
-                dispatch(setIncorrectKeyStatus(false))
-                dispatch(setAttendeeInfoLoading(false))
-
             })
+
     }
 }
 
@@ -65,21 +62,31 @@ export function uploadAudioBlobToFirebase(blob) {
         let listKey = state.singleAttendee.keys.listKey
         let attendeeKey = state.singleAttendee.keys.attendeeKey
 
+        // console.log(blob)
+
 
         Fire
             .storage()
             .ref(companyKey + "/" + listKey + "/" + attendeeKey + ".mp3")
             .put(blob)
             .then(function (snapshot) {
-                // dispatch(setAttendeeLoadedStatus(false))
 
                 dispatch(pullAttendee(companyKey, listKey, attendeeKey))
                 dispatch(setAudioIsUploading(false))
 
-                Fire
-                    .database()
-                    .ref("_COMPANIES/" + companyKey + "/_LISTS/" + listKey + "/_ATTENDEES/" + attendeeKey)
-                    .update({audioStatus: "Unverified"})
+
+                request
+                    .post(config.api + "/attendee/uploadaudio")
+                    .send({compID: companyKey, listID: listKey, attID: attendeeKey})
+                    .then(
+                        function(res) {
+                            if (res.text === "success") {
+                                dispatch(setAttendeeLoadedStatus(false))
+                                dispatch(setAudioIsUploading(false))
+                            }
+                        }
+                    )
+
             })
 
     }

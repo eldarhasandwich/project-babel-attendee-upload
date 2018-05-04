@@ -22,11 +22,13 @@ class App extends Component {
         return (
             <div className="App" style={this.appDivStyle}>
                 <MuiThemeProvider>
-                    <h1 style={{textAlign:"right", fontWeight:"normal"}}>Vocalist Recorder</h1>
-                    <div style={{height:"5px"}}/>
-                    <Paper style={this.paperStyle} zDepth={3}>
-                        <AttendeeView/>
-                    </Paper>
+                    <div>
+                        <h1 style={{textAlign:"right", fontWeight:"normal"}}>Vocalist Recorder</h1>
+                        <div style={{height:"5px"}}/>
+                        <Paper style={this.paperStyle} zDepth={3}>
+                            <AttendeeView/>
+                        </Paper>
+                    </div>
                 </MuiThemeProvider>
             </div>
         );
