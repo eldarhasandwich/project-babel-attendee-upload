@@ -12,7 +12,6 @@ import { Divider } from 'material-ui'
 
 import * as SingleAttendeeActions from '../../Actions/singleAttendee';
 
-
 class AudioRecordingModal extends Component {
 
     constructor(props) {
@@ -121,17 +120,12 @@ class AudioRecordingModal extends Component {
     
                 <Divider/>
 
-                <div style={{margin: "5px 0"}}>
+                <div style={{margin: "5px auto", maxWidth: "300px"}} className="mic-div">
                     <ReactMic
-                        style={{
-
-                            margin:"auto"
-
-                        }}
                         record={this.state.recording}
-                        className="sound-wave"
                         onStop={this.onStop}
                         strokeColor="#999"
+                        width={"300px"}
                     />
                 </div>
 

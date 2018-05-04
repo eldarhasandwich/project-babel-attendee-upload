@@ -4,6 +4,8 @@ import AttendeeView from '../AttendeeView/AttendeeView';
 import { MuiThemeProvider } from 'material-ui/styles';
 import { Paper } from 'material-ui';
 
+import titlelogo from '../../Resources/Images/titlelogo.png'
+
 class App extends Component {
 
     appDivStyle = {
@@ -18,12 +20,18 @@ class App extends Component {
         paddingBottom:"15px"
     }
 
+    titlelogoStyle = {
+        width:"60%",
+        marginLeft:"20%",
+        marginBottom:"15px"
+    }
+
     render() {
         return (
             <div className="App" style={this.appDivStyle}>
                 <MuiThemeProvider>
                     <div>
-                        <h1 style={{textAlign:"right", fontWeight:"normal"}}>Vocalist Recorder</h1>
+                        <img style={this.titlelogoStyle} src={titlelogo} alt="Vocalist"/>
                         <div style={{height:"5px"}}/>
                         <Paper style={this.paperStyle} zDepth={3}>
                             <AttendeeView/>
